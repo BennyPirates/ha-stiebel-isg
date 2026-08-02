@@ -1,7 +1,22 @@
 {
   "config": {
-    "step": {"user": {"title": "Mit STIEBEL ISG verbinden", "description": "Die Integration liest ausschließlich Modbus-Register (FC03/FC04).", "data": {"host": "Host", "port": "Port", "unit_id": "Unit-ID"}}},
+    "step": {"user": {"title": "Mit STIEBEL ISG verbinden", "description": "Die Integration liest Modbus-Register und unterstützt das dokumentierte Schreiben der Betriebsart.", "data": {"host": "Host", "port": "Port", "unit_id": "Unit-ID"}}},
     "error": {"cannot_connect": "Verbindung oder Erkennung des Register-Offsets fehlgeschlagen", "unknown": "Unerwarteter Fehler"},
     "abort": {"already_configured": "Dieses ISG ist bereits eingerichtet"}
+  },
+  "entity": {
+    "select": {
+      "operating_mode": {
+        "name": "Betriebsart",
+        "state": {"emergency": "Notbetrieb", "standby": "Bereitschaftsbetrieb", "program": "Programmbetrieb", "comfort": "Komfortbetrieb", "eco": "Eco-Betrieb", "dhw": "Warmwasserbetrieb"}
+      }
+    },
+    "number": {
+      "hc1_comfort_temperature": {"name": "Heizkreis 1 Komfort-Raumsolltemperatur"},
+      "hc1_eco_temperature": {"name": "Heizkreis 1 Eco-Raumsolltemperatur"},
+      "hc1_heating_curve": {"name": "Heizkreis 1 Heizkurve"},
+      "dhw_comfort_temperature": {"name": "Warmwasser Komforttemperatur"},
+      "dhw_eco_temperature": {"name": "Warmwasser Eco-Temperatur"}
+    }
   }
 }

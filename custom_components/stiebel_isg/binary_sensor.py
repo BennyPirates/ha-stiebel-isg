@@ -11,10 +11,16 @@ from .entity import StiebelIsgEntity
 from .registers import STATUS_BITS
 
 
-async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback) -> None:
+async def async_setup_entry(
+    hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback
+) -> None:
     coordinator: StiebelIsgCoordinator = entry.runtime_data
-    async_add_entities(StiebelStatusSensor(coordinator, entry.entry_id, entry.data[CONF_HOST], key, bit, name)
-                       for key, (bit, name) in STATUS_BITS.items())
+    async_add_entities(
+        StiebelStatusSensor(
+            coordinator, entry.entry_id, entry.data[CONF_HOST], key, bit, name
+        )
+        for key, (bit, name) in STATUS_BITS.items()
+    )
 
 
 class StiebelStatusSensor(StiebelIsgEntity, BinarySensorEntity):
@@ -32,4 +38,8 @@ class StiebelStatusSensor(StiebelIsgEntity, BinarySensorEntity):
     @property
     def is_on(self) -> bool | None:
         item = self.coordinator.data.get("operating_status")
-        return None if item is None or item.value is None else bool(int(item.value) & (1 << self._bit))
+        return (
+            None
+            if item is None or item.value is None
+            else bool(int(item.value) & (1 << self._bit))
+        )

@@ -16,16 +16,22 @@ class DecodeTests(unittest.TestCase):
         self.assertEqual(decode(123, 7), 1.23)
 
     def test_unavailable_precedes_signed_decode(self):
-        result = make_result(Register(507, "input", "Outside", 2, "°C", -60, 80), -1, 0x8000)
+        result = make_result(
+            Register(507, "input", "Outside", 2, "°C", -60, 80), -1, 0x8000
+        )
         self.assertEqual(result.availability, "unavailable")
         self.assertIsNone(result.decoded_value)
 
     def test_implausible(self):
-        result = make_result(Register(507, "input", "Outside", 2, "°C", -60, 80), -1, 1000)
+        result = make_result(
+            Register(507, "input", "Outside", 2, "°C", -60, 80), -1, 1000
+        )
         self.assertEqual(result.plausibility, "implausible")
 
     def test_fixed_temperature_off_encoding(self):
-        result = make_result(Register(1508, "holding", "Fixed", 2, "°C", 20, 70), -1, 0x9000)
+        result = make_result(
+            Register(1508, "holding", "Fixed", 2, "°C", 20, 70), -1, 0x9000
+        )
         self.assertEqual(result.decoded_value, "off")
         self.assertEqual(result.plausibility, "plausible")
 

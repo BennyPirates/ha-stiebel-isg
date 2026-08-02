@@ -11,13 +11,24 @@ from .entity import StiebelIsgEntity
 from .registers import REGISTERS
 
 SG_READY_STATES = {0: "Disabled", 1: "Blocked", 2: "Normal", 3: "Boost", 4: "Forced"}
+WRITABLE_ENTITY_KEYS = {
+    "operating_mode",
+    "hc1_comfort_temperature",
+    "hc1_eco_temperature",
+    "hc1_heating_curve",
+    "dhw_comfort_temperature",
+    "dhw_eco_temperature",
+}
 
 
-async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback) -> None:
+async def async_setup_entry(
+    hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback
+) -> None:
     coordinator: StiebelIsgCoordinator = entry.runtime_data
     async_add_entities(
         StiebelIsgSensor(coordinator, entry.entry_id, entry.data[CONF_HOST], register)
-        for register in REGISTERS if register.key != "operating_status"
+        for register in REGISTERS
+        if register.key not in WRITABLE_ENTITY_KEYS | {"operating_status"}
     )
 
 
@@ -34,7 +45,9 @@ class StiebelIsgSensor(StiebelIsgEntity, SensorEntity):
     @property
     def available(self) -> bool:
         item = self.coordinator.data.get(self.register.key)
-        return super().available and item is not None and item.available and item.plausible
+        return (
+            super().available and item is not None and item.available and item.plausible
+        )
 
     @property
     def native_value(self):
@@ -48,5 +61,9 @@ class StiebelIsgSensor(StiebelIsgEntity, SensorEntity):
     @property
     def extra_state_attributes(self):
         item = self.coordinator.data.get(self.register.key)
-        return {"register": self.register.address, "register_type": self.register.kind,
-                "raw_value": item.raw if item else None, "plausible": item.plausible if item else False}
+        return {
+            "register": self.register.address,
+            "register_type": self.register.kind,
+            "raw_value": item.raw if item else None,
+            "plausible": item.plausible if item else False,
+        }

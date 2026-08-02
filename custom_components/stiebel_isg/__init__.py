@@ -10,7 +10,12 @@ from .coordinator import StiebelIsgCoordinator
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
-    client = StiebelIsgClient(entry.data[CONF_HOST], entry.data[CONF_PORT], entry.data[CONF_UNIT_ID], DEFAULT_TIMEOUT)
+    client = StiebelIsgClient(
+        entry.data[CONF_HOST],
+        entry.data[CONF_PORT],
+        entry.data[CONF_UNIT_ID],
+        DEFAULT_TIMEOUT,
+    )
     coordinator = StiebelIsgCoordinator(hass, client, entry.data[CONF_OFFSET])
     await coordinator.async_config_entry_first_refresh()
     entry.runtime_data = coordinator

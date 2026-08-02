@@ -1,13 +1,18 @@
-# STIEBEL ISG für Home Assistant (read-only)
+# STIEBEL ISG für Home Assistant
 
 Eine lokale Home-Assistant-Custom-Integration und ein separates
-Diagnosewerkzeug für **WPMsystem + ISG Connect**. Beide lesen ausschließlich
-Modbus FC04 (Input Register) und FC03 (Holding Register). Der Quellcode enthält
-keine Schreibaufrufe.
+Diagnosewerkzeug für **WPMsystem + ISG Connect**. Das Diagnosewerkzeug ist
+vollständig lesend. Die Home-Assistant-Integration liest mit Modbus FC04 und
+FC03 und darf ausschließlich die dokumentierte Betriebsart sowie die
+Eco-Raumsolltemperatur für Heizkreis 1 über FC06 ändern.
 
 ## Sicherheit
 
-- Keine FC06/FC16-Operationen, keine Änderungen am ISG, keine HA-Installation.
+- Kein generischer Registerzugriff und keine FC16-Operationen. Eng begrenzte
+  FC06-Schreibpfade existieren ausschließlich für WPMsystem Holding Register
+  1501 (Betriebsart) und 1503 (Eco-Raumsolltemperatur Heizkreis 1). Sie
+  validieren Werte und Offset und prüfen das Ergebnis durch direktes
+  Zurücklesen.
 - Standard: Unit-ID 1, Timeout 3 s, 80 ms Pause je einzelner Abfrage.
 - Automatische Prüfung der Dokument→PDU-Offsets `-1` und `0` an fünf
   dokumentierten Registern. Bei uneindeutigem Ergebnis wird abgebrochen.
@@ -59,13 +64,13 @@ python -m pip install -r requirements.txt
 Zuerst nur die dokumentierten Kernregister:
 
 ```bash
-python stiebel_isg_probe.py 192.168.1.100
+python stiebel_isg_probe.py isg.local
 ```
 
 Danach kontrolliert mit kleinen angrenzenden Kandidatenbereichen:
 
 ```bash
-python stiebel_isg_probe.py 192.168.1.100 --scan-candidates
+python stiebel_isg_probe.py isg.local --scan-candidates
 ```
 
 Terminal, JSON und CSV enthalten Dokumentadresse, PDU-Adresse, Registerart,
@@ -75,22 +80,33 @@ Verfügbarkeit und Plausibilität. Ergebnisdateien landen in `results/`.
 Ein manueller Offset (`--offset -1` oder `--offset 0`) ist nur für die gezielte
 Fehleranalyse gedacht. Weitere Optionen zeigt `--help`.
 
-## Tests
+## Entwicklung und Tests
 
 ```bash
+.venv/bin/python -m pip install -r requirements-dev.txt
+.venv/bin/ruff format --check .
+.venv/bin/ruff check .
+.venv/bin/mypy
 python -m unittest discover -s tests -v
 ```
+
+Die lokalen Entwicklungsregeln stehen in [AGENTS.md](AGENTS.md), der Status
+der Home-Assistant-MCP-Umgebung in
+[docs/HA_DEVELOPMENT_ENVIRONMENT.md](docs/HA_DEVELOPMENT_ENVIRONMENT.md).
 
 Quellennachweis und lokale Herstellerdokumentation: [docs/SOURCES.md](docs/SOURCES.md).
 
 ## Entwicklungsstand
 
-Die erste Integration stellt ausgewählte Temperaturen, Drücke, Status-,
-Energie- und Laufzeitwerte als Sensoren und binäre Sensoren bereit. Auch
-dokumentierte Holding Register werden ausschließlich gelesen und als Sensoren
-angezeigt. Es gibt keine Number-, Select-, Switch- oder Service-Schnittstelle
-und keine Modbus-Schreibmethode. Konkrete Messdaten, private IP-Adressen und
-Hersteller-PDFs werden nicht veröffentlicht.
+Die Integration stellt ausgewählte Temperaturen, Drücke, Status-, Energie- und
+Laufzeitwerte als Sensoren und binäre Sensoren bereit. Die Betriebsart wird als
+Select-Entität angeboten: Notbetrieb, Bereitschaft, Programm, Komfort, Eco und
+Warmwasser. Die Eco-Raumsolltemperatur für Heizkreis 1 wird als begrenzte
+Number-Entität (5,0 bis 30,0 °C) angeboten. Alle anderen dokumentierten Holding
+Register bleiben lesend. Es
+gibt keine freie Register-, Number-, Switch- oder Service-Schnittstelle.
+Konkrete Messdaten, private IP-Adressen und Hersteller-PDFs werden nicht
+veröffentlicht.
 
 ## Lizenz
 

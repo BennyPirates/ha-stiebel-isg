@@ -1,7 +1,22 @@
 {
   "config": {
-    "step": {"user": {"title": "Connect to STIEBEL ISG", "description": "The integration only reads Modbus registers (FC03/FC04).", "data": {"host": "Host", "port": "Port", "unit_id": "Unit ID"}}},
+    "step": {"user": {"title": "Connect to STIEBEL ISG", "description": "The integration reads Modbus registers and supports the documented operating-mode write.", "data": {"host": "Host", "port": "Port", "unit_id": "Unit ID"}}},
     "error": {"cannot_connect": "Failed to connect or determine the register offset", "unknown": "Unexpected error"},
     "abort": {"already_configured": "This ISG is already configured"}
+  },
+  "entity": {
+    "select": {
+      "operating_mode": {
+        "name": "Operating mode",
+        "state": {"emergency": "Emergency operation", "standby": "Standby", "program": "Programmed operation", "comfort": "Comfort mode", "eco": "Eco mode", "dhw": "DHW mode"}
+      }
+    },
+    "number": {
+      "hc1_comfort_temperature": {"name": "Heating circuit 1 comfort temperature"},
+      "hc1_eco_temperature": {"name": "Heating circuit 1 Eco temperature"},
+      "hc1_heating_curve": {"name": "Heating circuit 1 heating curve"},
+      "dhw_comfort_temperature": {"name": "DHW comfort temperature"},
+      "dhw_eco_temperature": {"name": "DHW Eco temperature"}
+    }
   }
 }
