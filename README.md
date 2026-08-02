@@ -19,6 +19,12 @@ keine Schreibaufrufe.
 
 ## Installation in Home Assistant über HACS
 
+[![Open your Home Assistant instance and add this repository to HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=BennyPirates&repository=ha-stiebel-isg&category=integration)
+
+Der Button öffnet die eigene lokale Home-Assistant-Instanz und trägt dieses
+Repository als HACS-Integration ein. Alternativ funktioniert die manuelle
+Einrichtung:
+
 Die Integration befindet sich zunächst in der Entwicklung. Nach dem ersten
 GitHub-Release kann sie ohne manuelles Kopieren installiert werden:
 
