@@ -25,8 +25,8 @@ Der Button öffnet die eigene lokale Home-Assistant-Instanz und trägt dieses
 Repository als HACS-Integration ein. Alternativ funktioniert die manuelle
 Einrichtung:
 
-Die Integration befindet sich zunächst in der Entwicklung. Nach dem ersten
-GitHub-Release kann sie ohne manuelles Kopieren installiert werden:
+Die Integration wird als benutzerdefiniertes HACS-Repository verteilt und kann
+ohne manuelles Kopieren installiert werden:
 
 1. HACS öffnen und rechts oben **Benutzerdefinierte Repositories** wählen.
 2. `https://github.com/BennyPirates/ha-stiebel-isg` als Kategorie
