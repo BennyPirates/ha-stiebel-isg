@@ -1,0 +1,39 @@
+name: Bug report
+description: Report reproducible integration or diagnostic behavior
+title: "[Bug]: "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: Do not include private IP addresses, credentials, or unredacted diagnostic exports.
+  - type: input
+    id: version
+    attributes:
+      label: Integration version
+      placeholder: v0.1.0
+    validations:
+      required: true
+  - type: input
+    id: equipment
+    attributes:
+      label: Equipment
+      description: Heat pump, controller, ISG model, and firmware (no serial number)
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: What happened?
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant anonymised logs
+      render: text

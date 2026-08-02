@@ -1,0 +1,24 @@
+name: Feature request
+description: Suggest a documented read-only capability
+title: "[Feature]: "
+labels: [enhancement]
+body:
+  - type: textarea
+    id: use_case
+    attributes:
+      label: Use case
+      description: What should become observable in Home Assistant and why?
+    validations:
+      required: true
+  - type: input
+    id: documentation
+    attributes:
+      label: Official register documentation
+      description: Link and register address, if available
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Safety boundary
+      options:
+        - label: This request does not require writing a Modbus register.
+          required: true

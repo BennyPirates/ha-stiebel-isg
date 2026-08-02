@@ -1,0 +1,7 @@
+{
+  "config": {
+    "step": {"user": {"title": "Mit STIEBEL ISG verbinden", "description": "Die Integration liest ausschließlich Modbus-Register (FC03/FC04).", "data": {"host": "Host", "port": "Port", "unit_id": "Unit-ID"}}},
+    "error": {"cannot_connect": "Verbindung oder Erkennung des Register-Offsets fehlgeschlagen", "unknown": "Unerwarteter Fehler"},
+    "abort": {"already_configured": "Dieses ISG ist bereits eingerichtet"}
+  }
+}

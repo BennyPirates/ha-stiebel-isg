@@ -1,8 +1,9 @@
-# STIEBEL ISG Read-only Diagnosewerkzeug
+# STIEBEL ISG für Home Assistant (read-only)
 
-Ein separates Diagnosewerkzeug für **WPL 17 ICS classic + WPMsystem + ISG
-Connect**. Es liest ausschließlich Modbus FC04 (Input Register) und FC03
-(Holding Register). Der Quellcode enthält keine Schreibaufrufe.
+Eine lokale Home-Assistant-Custom-Integration und ein separates
+Diagnosewerkzeug für **WPMsystem + ISG Connect**. Beide lesen ausschließlich
+Modbus FC04 (Input Register) und FC03 (Holding Register). Der Quellcode enthält
+keine Schreibaufrufe.
 
 ## Sicherheit
 
@@ -16,7 +17,30 @@ Connect**. Es liest ausschließlich Modbus FC04 (Input Register) und FC03
 - Die gefährlichen Reset-/Restart-Holding-Register 1520 und 1521 werden auch
   nicht in die Kernliste aufgenommen.
 
-## Installation
+## Installation in Home Assistant über HACS
+
+Die Integration befindet sich zunächst in der Entwicklung. Nach dem ersten
+GitHub-Release kann sie ohne manuelles Kopieren installiert werden:
+
+1. HACS öffnen und rechts oben **Benutzerdefinierte Repositories** wählen.
+2. `https://github.com/BennyPirates/ha-stiebel-isg` als Kategorie
+   **Integration** hinzufügen.
+3. **STIEBEL ELTRON ISG** herunterladen und Home Assistant neu starten.
+4. Unter **Einstellungen → Geräte & Dienste → Integration hinzufügen** nach
+   **STIEBEL ELTRON ISG** suchen.
+5. IP-Adresse des ISG eintragen. Port 502 und Unit-ID 1 sind vorbelegt.
+
+Der Config Flow prüft die Verbindung und erkennt den Dokument-/PDU-Offset
+automatisch anhand mehrerer plausibler WPMsystem-Register. Das ISG wird lokal
+alle 30 Sekunden abgefragt. `0x8000` wird als nicht verfügbar behandelt;
+dadurch werden beispielsweise Kühlentitäten automatisch verfügbar, sobald die
+Anlage diese Register später bereitstellt. SG Ready Rohwert 0 wird als
+`Disabled` dargestellt.
+
+Updates erscheinen nach neuen GitHub-Releases direkt in HACS. Konfiguration,
+Gerät und Entity-IDs bleiben dabei erhalten.
+
+## Diagnosewerkzeug installieren
 
 ```bash
 python3 -m venv .venv
@@ -53,12 +77,14 @@ python -m unittest discover -s tests -v
 
 Quellennachweis und lokale Herstellerdokumentation: [docs/SOURCES.md](docs/SOURCES.md).
 
-## Home Assistant
+## Entwicklungsstand
 
-Eine über HACS installierbare, zunächst vollständig lesende Home-Assistant-
-Integration ist der nächste Entwicklungsschritt. Das Diagnosewerkzeug bleibt
-als separates Hilfsmittel Bestandteil dieses Repositories. Konkrete Messdaten,
-private IP-Adressen und Hersteller-PDFs werden nicht veröffentlicht.
+Die erste Integration stellt ausgewählte Temperaturen, Drücke, Status-,
+Energie- und Laufzeitwerte als Sensoren und binäre Sensoren bereit. Auch
+dokumentierte Holding Register werden ausschließlich gelesen und als Sensoren
+angezeigt. Es gibt keine Number-, Select-, Switch- oder Service-Schnittstelle
+und keine Modbus-Schreibmethode. Konkrete Messdaten, private IP-Adressen und
+Hersteller-PDFs werden nicht veröffentlicht.
 
 ## Lizenz
 
