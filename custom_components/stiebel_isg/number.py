@@ -15,7 +15,6 @@ from .entity import StiebelIsgEntity
 @dataclass(frozen=True, slots=True)
 class NumberDescription:
     key: str
-    name: str
     minimum: float
     maximum: float
     step: float
@@ -27,7 +26,6 @@ class NumberDescription:
 NUMBER_DESCRIPTIONS = (
     NumberDescription(
         "hc1_comfort_temperature",
-        "HC1 comfort temperature",
         5,
         30,
         0.1,
@@ -37,7 +35,6 @@ NUMBER_DESCRIPTIONS = (
     ),
     NumberDescription(
         "hc1_eco_temperature",
-        "HC1 Eco temperature",
         5,
         30,
         0.1,
@@ -45,12 +42,9 @@ NUMBER_DESCRIPTIONS = (
         UnitOfTemperature.CELSIUS,
         NumberDeviceClass.TEMPERATURE,
     ),
-    NumberDescription(
-        "hc1_heating_curve", "HC1 heating curve", 0, 3, 0.01, "mdi:chart-bell-curve"
-    ),
+    NumberDescription("hc1_heating_curve", 0, 3, 0.01, "mdi:chart-bell-curve"),
     NumberDescription(
         "dhw_comfort_temperature",
-        "DHW comfort temperature",
         10,
         60,
         0.5,
@@ -60,7 +54,6 @@ NUMBER_DESCRIPTIONS = (
     ),
     NumberDescription(
         "dhw_eco_temperature",
-        "DHW Eco temperature",
         10,
         60,
         0.5,
@@ -90,7 +83,6 @@ class StiebelWritableNumber(StiebelIsgEntity, NumberEntity):
         super().__init__(coordinator, entry_id, host)
         self._description = description
         self._attr_unique_id = f"{entry_id}_{description.key}"
-        self._attr_name = description.name
         self._attr_translation_key = description.key
         self._attr_icon = description.icon
         self._attr_device_class = description.device_class

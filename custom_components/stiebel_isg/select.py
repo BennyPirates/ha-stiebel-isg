@@ -25,7 +25,6 @@ async def async_setup_entry(
 class StiebelOperatingModeSelect(StiebelIsgEntity, SelectEntity):
     """Select for the documented WPMsystem operating mode register 1501."""
 
-    _attr_name = "Operating mode"
     _attr_translation_key = "operating_mode"
     _attr_options: ClassVar[list[str]] = list(OPERATING_MODE_TO_VALUE)
     _attr_icon = "mdi:heat-pump-outline"
